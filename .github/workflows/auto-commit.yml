@@ -1,0 +1,25 @@
+name: Auto Commit Multiple Times
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 04:00 VN
+    - cron: '0 1 * * *'   # 08:00 VN
+    - cron: '0 5 * * *'   # 12:00 VN
+    - cron: '0 14 * * *'  # 21:00 VN
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Auto Commit
+        run: |
+          echo "$(date)" > last-commit.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add last-commit.txt
+          git commit -m "Auto commit to keep streak ⏰"
+          git push
